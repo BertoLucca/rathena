@@ -1,0 +1,11 @@
+runserver.bat
+login-server.exe
+char-server.exe
+map-server.exe
+mapserv.bat
+logserv.bat
+charserv.bat
+serv.bat
+libmysql.dll
+pcre8.dll
+zlib.dll
