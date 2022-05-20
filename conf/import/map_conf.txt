@@ -1,5 +1,5 @@
 // Server Communication username and password.
-userid: ragnarok
+userid: serverconn
 passwd: password
 
 // Character Server IP
