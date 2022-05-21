@@ -44,6 +44,9 @@ Thumbs.db
 /nbproject
 /yaml2sql
 /yamlupgrade
+!/login-server.exe
+!/char-server.exe
+!/map-server.exe
 
 # /3rdparty/libconfig/
 /3rdparty/libconfig/Makefile
@@ -108,20 +111,10 @@ Thumbs.db
 /cbuild/
 
 # bat tools
-/charserv.bat
 /csv2yaml.bat
-/logserv.bat
 /mapcache.bat
-/mapserv.bat
-/runserver.bat
-/serv.bat
 /yaml2sql.bat
 /yamlupgrade.bat
-
-# dlls
-/libmysql.dll
-/pcre8.dll
-/zlib.dll
 
 # CMakeFiles
 /CMakeFiles/
