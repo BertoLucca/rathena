@@ -44,9 +44,6 @@ Thumbs.db
 /nbproject
 /yaml2sql
 /yamlupgrade
-!/login-server.exe
-!/char-server.exe
-!/map-server.exe
 
 # /3rdparty/libconfig/
 /3rdparty/libconfig/Makefile
@@ -107,7 +104,7 @@ Thumbs.db
 /.idea/rathena.iml
 /.idea/vcs.xml
 /.idea/workspace.xml
-/build/
+#/build/
 /cbuild/
 
 # bat tools
