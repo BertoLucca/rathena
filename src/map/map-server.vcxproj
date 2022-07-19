@@ -260,20 +260,20 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="AfterClean">
-    <Delete Files="$(SolutionDir)libmysql.dll" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)zlib.dll" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)pcre8.dll" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)serv.bat" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)mapserv.bat" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)runserver.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\libmysql.dll" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\zlib.dll" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\pcre8.dll" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\serv.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\mapserv.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\runserver.bat" ContinueOnError="true" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)3rdparty\mysql\lib\$(Platform)\libmysql.dll" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)libmysql.dll')" />
-    <Copy SourceFiles="$(SolutionDir)3rdparty\pcre\lib\$(Platform)\pcre8.dll" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)pcre8.dll')" />
-    <Copy SourceFiles="$(SolutionDir)3rdparty\zlib\lib\$(Platform)\zlib.dll" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)zlib.dll')" />
-    <Copy SourceFiles="$(SolutionDir)tools\serv.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)serv.bat')" />
-    <Copy SourceFiles="$(SolutionDir)tools\mapserv.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)mapserv.bat')" />
-    <Copy SourceFiles="$(SolutionDir)tools\runserver.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)runserver.bat')" />
+    <Copy SourceFiles="$(SolutionDir)3rdparty\mysql\lib\$(Platform)\libmysql.dll" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\libmysql.dll')" />
+    <Copy SourceFiles="$(SolutionDir)3rdparty\pcre\lib\$(Platform)\pcre8.dll" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\pcre8.dll')" />
+    <Copy SourceFiles="$(SolutionDir)3rdparty\zlib\lib\$(Platform)\zlib.dll" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\zlib.dll')" />
+    <Copy SourceFiles="$(SolutionDir)tools\serv.bat" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\serv.bat')" />
+    <Copy SourceFiles="$(SolutionDir)tools\mapserv.bat" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\mapserv.bat')" />
+    <Copy SourceFiles="$(SolutionDir)tools\runserver.bat" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\runserver.bat')" />
     <Copy SourceFiles="$(SolutionDir)conf\import-tmpl\atcommands.yml" DestinationFolder="$(SolutionDir)conf\import\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)conf\import\atcommands.yml')" />
     <Copy SourceFiles="$(SolutionDir)conf\import-tmpl\battle_conf.txt" DestinationFolder="$(SolutionDir)conf\import\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)conf\import\battle_conf.txt')" />
     <Copy SourceFiles="$(SolutionDir)conf\import-tmpl\char_conf.txt" DestinationFolder="$(SolutionDir)conf\import\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)conf\import\char_conf.txt')" />

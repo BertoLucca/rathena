@@ -173,13 +173,13 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="AfterClean">
-    <Delete Files="$(SolutionDir)zlib.dll" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)serv.bat" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)csv2yaml.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\zlib.dll" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\serv.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\csv2yaml.bat" ContinueOnError="true" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)3rdparty\zlib\lib\$(Platform)\zlib.dll" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)zlib.dll')" />
-    <Copy SourceFiles="$(SolutionDir)tools\serv.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)serv.bat')" />
-    <Copy SourceFiles="$(SolutionDir)tools\csv2yaml.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)csv2yaml.bat')" />
+    <Copy SourceFiles="$(SolutionDir)3rdparty\zlib\lib\$(Platform)\zlib.dll" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\zlib.dll')" />
+    <Copy SourceFiles="$(SolutionDir)tools\serv.bat" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\serv.bat')" />
+    <Copy SourceFiles="$(SolutionDir)tools\csv2yaml.bat" DestinationFolder="$(SolutionDir)build" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\csv2yaml.bat')" />
   </Target>
 </Project>
