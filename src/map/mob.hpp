@@ -29,6 +29,8 @@ struct guardian_data;
 #define MAX_MOB_DROP_TOTAL (MAX_MOB_DROP+MAX_MOB_DROP_ADD)
 #define MAX_MVP_DROP_TOTAL (MAX_MVP_DROP+MAX_MVP_DROP_ADD)
 
+#define MAX_MINCHASE 30	//Max minimum chase value to use for mobs.
+
 //Min time between AI executions
 const t_tick MIN_MOBTHINKTIME = 100;
 //Min time before mobs do a check to call nearby friends for help (or for slaves to support their master)
@@ -74,6 +76,14 @@ enum MOBID {
 	MOBID_S_GIANT_HORNET,
 	MOBID_S_LUCIOLA_VESPA,
 	MOBID_GUILD_SKILL_FLAG	= 20269,
+	MOBID_ABR_BATTLE_WARIOR = 20834,
+	MOBID_ABR_DUAL_CANNON,
+	MOBID_ABR_MOTHER_NET,
+	MOBID_ABR_INFINITY,
+	MOBID_BIONIC_WOODENWARRIOR = 20848,
+	MOBID_BIONIC_WOODEN_FAIRY,
+	MOBID_BIONIC_CREEPER,
+	MOBID_BIONIC_HELLTREE,
 };
 
 ///Mob skill states.
@@ -202,8 +212,8 @@ public:
 
 	}
 
-	const std::string getDefaultLocation();
-	uint64 parseBodyNode(const YAML::Node &node);
+	const std::string getDefaultLocation() override;
+	uint64 parseBodyNode(const ryml::NodeRef& node) override;
 };
 
 struct s_mob_item_drop_ratio {
@@ -218,8 +228,8 @@ public:
 
 	}
 
-	const std::string getDefaultLocation();
-	uint64 parseBodyNode(const YAML::Node &node);
+	const std::string getDefaultLocation() override;
+	uint64 parseBodyNode(const ryml::NodeRef& node) override;
 };
 
 struct spawn_info {
@@ -262,16 +272,16 @@ struct s_mob_db {
 
 class MobDatabase : public TypesafeCachedYamlDatabase <uint32, s_mob_db> {
 private:
-	bool parseDropNode(std::string nodeName, YAML::Node node, uint8 max, s_mob_drop *drops);
+	bool parseDropNode(std::string nodeName, const ryml::NodeRef& node, uint8 max, s_mob_drop *drops);
 
 public:
-	MobDatabase() : TypesafeCachedYamlDatabase("MOB_DB", 2, 1) {
+	MobDatabase() : TypesafeCachedYamlDatabase("MOB_DB", 3, 1) {
 
 	}
 
-	const std::string getDefaultLocation();
-	uint64 parseBodyNode(const YAML::Node &node);
-	void loadingFinished();
+	const std::string getDefaultLocation() override;
+	uint64 parseBodyNode(const ryml::NodeRef& node) override;
+	void loadingFinished() override;
 };
 
 extern MobDatabase mob_db;
@@ -353,9 +363,9 @@ public:
 
 	}
 
-	void clear() { };
-	const std::string getDefaultLocation();
-	uint64 parseBodyNode(const YAML::Node& node);
+	void clear() override{ };
+	const std::string getDefaultLocation() override;
+	uint64 parseBodyNode(const ryml::NodeRef& node) override;
 };
 
 struct s_randomsummon_entry {
@@ -375,8 +385,8 @@ public:
 
 	}
 
-	const std::string getDefaultLocation();
-	uint64 parseBodyNode(const YAML::Node &node);
+	const std::string getDefaultLocation() override;
+	uint64 parseBodyNode(const ryml::NodeRef& node) override;
 };
 
 enum e_mob_skill_target {
@@ -420,6 +430,7 @@ enum e_mob_skill_condition {
 	MSC_MASTERATTACKED,
 	MSC_ALCHEMIST,
 	MSC_SPAWN,
+	MSC_MOBNEARBYGT,
 };
 
 // The data structures for storing delayed item drops
@@ -437,7 +448,7 @@ struct item_drop_list {
 
 uint16 mobdb_searchname(const char * const str);
 std::shared_ptr<s_mob_db> mobdb_search_aegisname( const char* str );
-int mobdb_searchname_array(const char *str, uint16 * out, int size);
+uint16 mobdb_searchname_array(const char *str, uint16 * out, uint16 size);
 int mobdb_checkid(const int id);
 struct view_data* mob_get_viewdata(int mob_id);
 void mob_set_dynamic_viewdata( struct mob_data* md );
