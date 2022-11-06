@@ -68,22 +68,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir).vs\build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir).vs\build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir).vs\build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir).vs\build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -204,15 +204,15 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="AfterClean">
-    <Delete Files="$(SolutionDir)libmysql.dll" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)serv.bat" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)logserv.bat" ContinueOnError="true" />
-    <Delete Files="$(SolutionDir)runserver.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\libmysql.dll" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\serv.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\logserv.bat" ContinueOnError="true" />
+    <Delete Files="$(SolutionDir)build\runserver.bat" ContinueOnError="true" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)3rdparty\mysql\lib\$(Platform)\libmysql.dll" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)libmysql.dll')" />
-    <Copy SourceFiles="$(SolutionDir)tools\serv.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)serv.bat')" />
-    <Copy SourceFiles="$(SolutionDir)tools\logserv.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)logserv.bat')" />
-    <Copy SourceFiles="$(SolutionDir)tools\runserver.bat" DestinationFolder="$(SolutionDir)" ContinueOnError="true" Condition="!Exists('$(SolutionDir)runserver.bat')" />
+    <Copy SourceFiles="$(SolutionDir)3rdparty\mysql\lib\$(Platform)\libmysql.dll" DestinationFolder="$(SolutionDir)build\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\libmysql.dll')" />
+    <Copy SourceFiles="$(SolutionDir)tools\serv.bat" DestinationFolder="$(SolutionDir)build\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\serv.bat')" />
+    <Copy SourceFiles="$(SolutionDir)tools\logserv.bat" DestinationFolder="$(SolutionDir)build\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\logserv.bat')" />
+    <Copy SourceFiles="$(SolutionDir)tools\runserver.bat" DestinationFolder="$(SolutionDir)build\" ContinueOnError="true" Condition="!Exists('$(SolutionDir)build\runserver.bat')" />
   </Target>
 </Project>
