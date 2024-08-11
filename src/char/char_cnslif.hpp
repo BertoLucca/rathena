@@ -4,8 +4,7 @@
 #ifndef CHAR_CNSLIF_HPP
 #define CHAR_CNSLIF_HPP
 
-int cnslif_parse(const char* buf);
+int cnslif_parse(const char *buf);
 void do_init_chcnslif(void);
-
 
 #endif /* CHAR_CNSLIF_HPP */

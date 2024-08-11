@@ -21,7 +21,7 @@ int logchrif_parse(int fd);
  * @param len: size of packet
  * @return : the number of char-serv the packet was sent to
  */
-int logchrif_sendallwos(int sfd, uint8* buf, size_t len);
+int logchrif_sendallwos(int sfd, uint8 *buf, size_t len);
 
 /**
  * loginchrif constructor
@@ -40,4 +40,4 @@ void do_shutdown_loginchrif(void);
  */
 void do_final_loginchrif(void);
 
-#endif	/* LOGINCHRIF_HPP */
+#endif /* LOGINCHRIF_HPP */

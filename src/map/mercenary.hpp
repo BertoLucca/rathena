@@ -7,66 +7,64 @@
 #include <common/cbasetypes.hpp>
 
 #include "status.hpp" // struct status_data, struct status_change
-#include "unit.hpp" // struct unit_data
+#include "unit.hpp"   // struct unit_data
 
 // number of cells that a mercenary can walk to from it's master before being warped
 #define MAX_MER_DISTANCE 15
 
 enum e_MercGuildType {
-	NONE_MERC_GUILD = -1,
-	ARCH_MERC_GUILD,
-	SPEAR_MERC_GUILD,
-	SWORD_MERC_GUILD,
+    NONE_MERC_GUILD = -1,
+    ARCH_MERC_GUILD,
+    SPEAR_MERC_GUILD,
+    SWORD_MERC_GUILD,
 };
 
 enum e_MERID {
-	MERID_MER_ARCHER01 = 6017,
-	MERID_MER_ARCHER10 = 6026,
-	MERID_MER_LANCER01,
-	MERID_MER_LANCER10 = 6036,
-	MERID_MER_SWORDMAN01,
-	MERID_MER_SWORDMAN10 = 6046
+    MERID_MER_ARCHER01 = 6017,
+    MERID_MER_ARCHER10 = 6026,
+    MERID_MER_LANCER01,
+    MERID_MER_LANCER10 = 6036,
+    MERID_MER_SWORDMAN01,
+    MERID_MER_SWORDMAN10 = 6046
 };
 
 struct s_mercenary_db {
-	int32 class_;
-	std::string sprite, name;
-	uint16 lv;
-	uint16 range2, range3;
-	status_data status;
-	view_data vd;
-	std::unordered_map<uint16, uint16> skill;
+    int32 class_;
+    std::string sprite, name;
+    uint16 lv;
+    uint16 range2, range3;
+    status_data status;
+    view_data vd;
+    std::unordered_map<uint16, uint16> skill;
 };
 
 struct s_mercenary_data {
-	block_list bl;
-	unit_data ud;
-	view_data *vd;
-	status_data base_status, battle_status;
-	status_change sc;
-	regen_data regen;
+    block_list bl;
+    unit_data ud;
+    view_data *vd;
+    status_data base_status, battle_status;
+    status_change sc;
+    regen_data regen;
 
-	std::shared_ptr<s_mercenary_db> db;
-	s_mercenary mercenary;
-	std::vector<uint16> blockskill;
+    std::shared_ptr<s_mercenary_db> db;
+    s_mercenary mercenary;
+    std::vector<uint16> blockskill;
 
-	int masterteleport_timer;
-	map_session_data *master;
-	int contract_timer;
+    int masterteleport_timer;
+    map_session_data *master;
+    int contract_timer;
 
-	unsigned devotion_flag : 1;
+    unsigned devotion_flag : 1;
 };
 
-struct view_data * mercenary_get_viewdata(uint16 class_);
+struct view_data *mercenary_get_viewdata(uint16 class_);
 
 class MercenaryDatabase : public TypesafeYamlDatabase<int32, s_mercenary_db> {
-public:
-	MercenaryDatabase() : TypesafeYamlDatabase("MERCENARY_DB", 1) {
+  public:
+    MercenaryDatabase() : TypesafeYamlDatabase("MERCENARY_DB", 1) {}
 
-	}
-
-	const std::string getDefaultLocation() override;
-	uint64 parseBodyNode(const ryml::NodeRef& node) override;
+    const std::string getDefaultLocation() override;
+    uint64 parseBodyNode(const ryml::NodeRef &node) override;
 };
 
 extern MercenaryDatabase mercenary_db;

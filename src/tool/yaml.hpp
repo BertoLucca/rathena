@@ -12,16 +12,16 @@
 #include <vector>
 
 #ifdef WIN32
-	#include <conio.h>
+#include <conio.h>
 #else
-	#include <termios.h>
-	#include <unistd.h>
-	#include <cstdio>
+#include <termios.h>
+#include <unistd.h>
+#include <cstdio>
 #endif
 
-#include <yaml-cpp/yaml.h>
-#include <ryml_std.hpp>
 #include <ryml.hpp>
+#include <ryml_std.hpp>
+#include <yaml-cpp/yaml.h>
 
 #include <common/cbasetypes.hpp>
 #include <common/core.hpp>
@@ -62,19 +62,19 @@ using namespace rathena;
 
 /// Uncomment this line to enable the ability for the conversion tools to automatically convert
 /// all files with no user interaction, whether it be from CSV to YAML or YAML to SQL.
-//#define CONVERT_ALL
+// #define CONVERT_ALL
 
 #ifndef WIN32
 int getch(void) {
-	struct termios oldattr, newattr;
-	int ch;
-	tcgetattr(STDIN_FILENO, &oldattr);
-	newattr = oldattr;
-	newattr.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-	ch = getchar();
-	tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-	return ch;
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+    return ch;
 }
 #endif
 
@@ -90,33 +90,33 @@ std::unordered_map<const char *, int64> constants;
 
 // Implement the function instead of including the original version by linking
 void script_set_constant_(const char *name, int64 value, const char *constant_name, bool isparameter, bool deprecated) {
-	if (!deprecated)
-		constants[name] = value;
+    if (!deprecated)
+        constants[name] = value;
 }
 
 const char *constant_lookup(int32 value, const char *prefix) {
-	nullpo_retr(nullptr, prefix);
+    nullpo_retr(nullptr, prefix);
 
-	for (auto const &pair : constants) {
-		// Same prefix group and same value
-		if (strncasecmp(pair.first, prefix, strlen(prefix)) == 0 && pair.second == value) {
-			return pair.first;
-		}
-	}
+    for (auto const &pair : constants) {
+        // Same prefix group and same value
+        if (strncasecmp(pair.first, prefix, strlen(prefix)) == 0 && pair.second == value) {
+            return pair.first;
+        }
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 int64 constant_lookup_int(const char *constant) {
-	nullpo_retr(-100, constant);
+    nullpo_retr(-100, constant);
 
-	for (auto const &pair : constants) {
-		if (strlen(pair.first) == strlen(constant) && strncasecmp(pair.first, constant, strlen(constant)) == 0) {
-			return pair.second;
-		}
-	}
+    for (auto const &pair : constants) {
+        if (strlen(pair.first) == strlen(constant) && strncasecmp(pair.first, constant, strlen(constant)) == 0) {
+            return pair.second;
+        }
+    }
 
-	return -100;
+    return -100;
 }
 
 /**
@@ -125,17 +125,17 @@ int64 constant_lookup_int(const char *constant) {
  * @return True if file exists or false otherwise
  */
 bool fileExists(const std::string &path) {
-	std::ifstream in;
+    std::ifstream in;
 
-	in.open(path);
+    in.open(path);
 
-	if (in.is_open()) {
-		in.close();
+    if (in.is_open()) {
+        in.close();
 
-		return true;
-	} else {
-		return false;
-	}
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -145,21 +145,21 @@ bool fileExists(const std::string &path) {
  * @return True on yes or false otherwise
  */
 bool askConfirmation(const char *fmt, ...) {
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, fmt);
+    va_start(ap, fmt);
 
-	_vShowMessage(MSG_NONE, fmt, ap);
+    _vShowMessage(MSG_NONE, fmt, ap);
 
-	va_end(ap);
+    va_end(ap);
 
-	char c = getch();
+    char c = getch();
 
-	if (c == 'Y' || c == 'y') {
-		return true;
-	} else {
-		return false;
-	}
+    if (c == 'Y' || c == 'y') {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -168,7 +168,7 @@ bool askConfirmation(const char *fmt, ...) {
  * @return Version number
  */
 uint32 getHeaderVersion(YAML::Node &node) {
-	return node["Header"]["Version"].as<uint32>();
+    return node["Header"]["Version"].as<uint32>();
 }
 
 /**
@@ -178,22 +178,22 @@ uint32 getHeaderVersion(YAML::Node &node) {
  * @param newLine: Append new line at end of copy
  */
 void copyFileIfExists(std::ofstream &file, const std::string &name, bool newLine) {
-	std::string path = "doc/yaml/db/" + name + ".yml";
+    std::string path = "doc/yaml/db/" + name + ".yml";
 
-	if (fileExists(path)) {
-		std::ifstream source(path, std::ios::binary);
+    if (fileExists(path)) {
+        std::ifstream source(path, std::ios::binary);
 
-		std::istreambuf_iterator<char> begin_source(source);
-		std::istreambuf_iterator<char> end_source;
-		std::ostreambuf_iterator<char> begin_dest(file);
-		copy(begin_source, end_source, begin_dest);
+        std::istreambuf_iterator<char> begin_source(source);
+        std::istreambuf_iterator<char> end_source;
+        std::ostreambuf_iterator<char> begin_dest(file);
+        copy(begin_source, end_source, begin_dest);
 
-		source.close();
+        source.close();
 
-		if (newLine) {
-			file << "\n";
-		}
-	}
+        if (newLine) {
+            file << "\n";
+        }
+    }
 }
 
 /**
@@ -204,21 +204,21 @@ void copyFileIfExists(std::ofstream &file, const std::string &name, bool newLine
  * @param name: File name
  */
 void prepareHeader(std::ofstream &file, const std::string &type, uint32 version, const std::string &name) {
-	copyFileIfExists(file, "license", false);
-	copyFileIfExists(file, name, true);
+    copyFileIfExists(file, "license", false);
+    copyFileIfExists(file, name, true);
 
-	YAML::Emitter header(file);
+    YAML::Emitter header(file);
 
-	header << YAML::BeginMap;
-	header << YAML::Key << "Header";
-	header << YAML::BeginMap;
-	header << YAML::Key << "Type" << YAML::Value << type;
-	header << YAML::Key << "Version" << YAML::Value << version;
-	header << YAML::EndMap;
-	header << YAML::EndMap;
+    header << YAML::BeginMap;
+    header << YAML::Key << "Header";
+    header << YAML::BeginMap;
+    header << YAML::Key << "Type" << YAML::Value << type;
+    header << YAML::Key << "Version" << YAML::Value << version;
+    header << YAML::EndMap;
+    header << YAML::EndMap;
 
-	file << "\n";
-	file << "\n";
+    file << "\n";
+    file << "\n";
 }
 
 /**
@@ -226,48 +226,48 @@ void prepareHeader(std::ofstream &file, const std::string &type, uint32 version,
  * @param file: File stream
  */
 void prepareFooter(std::ostream &file) {
-	if (!inNode["Footer"].IsDefined())
-		return;
+    if (!inNode["Footer"].IsDefined())
+        return;
 
-	if (inNode["Body"].IsDefined()) {
-		file << "\n";
-		file << "\n";
-	}
+    if (inNode["Body"].IsDefined()) {
+        file << "\n";
+        file << "\n";
+    }
 
-	YAML::Emitter footer(file);
+    YAML::Emitter footer(file);
 
-	footer << YAML::BeginMap;
-	footer << YAML::Key << "Footer";
-	footer << YAML::BeginMap;
-	footer << YAML::Key << "Imports";
-	footer << YAML::BeginSeq;
-	for (const YAML::Node &import : inNode["Footer"]["Imports"]) {
-		footer << YAML::BeginMap;
-		footer << YAML::Key << "Path" << YAML::Value << import["Path"];
-		if (import["Mode"].IsDefined())
-			footer << YAML::Key << "Mode" << YAML::Value << import["Mode"];
-		footer << YAML::EndMap;
-	}
-	footer << YAML::EndSeq;
-	footer << YAML::EndMap;
-	footer << YAML::EndMap;
+    footer << YAML::BeginMap;
+    footer << YAML::Key << "Footer";
+    footer << YAML::BeginMap;
+    footer << YAML::Key << "Imports";
+    footer << YAML::BeginSeq;
+    for (const YAML::Node &import : inNode["Footer"]["Imports"]) {
+        footer << YAML::BeginMap;
+        footer << YAML::Key << "Path" << YAML::Value << import["Path"];
+        if (import["Mode"].IsDefined())
+            footer << YAML::Key << "Mode" << YAML::Value << import["Mode"];
+        footer << YAML::EndMap;
+    }
+    footer << YAML::EndSeq;
+    footer << YAML::EndMap;
+    footer << YAML::EndMap;
 }
 
 /**
  * Prepares body for output.
  */
 void prepareBody(void) {
-	body << YAML::BeginMap;
-	body << YAML::Key << "Body";
-	body << YAML::BeginSeq;
+    body << YAML::BeginMap;
+    body << YAML::Key << "Body";
+    body << YAML::BeginSeq;
 }
 
 /**
  * Finalizes body's output.
  */
 void finalizeBody(void) {
-	body << YAML::EndSeq;
-	body << YAML::EndMap;
+    body << YAML::EndSeq;
+    body << YAML::EndMap;
 }
 
 /**
@@ -278,24 +278,24 @@ void finalizeBody(void) {
  * @return 0:error, x:number of value assign (max value)
  */
 int skill_split_atoi(char *str, int *val, int max = MAX_SKILL_LEVEL) {
-	int i;
+    int i;
 
-	for (i = 0; i < max; i++) {
-		if (!str)
-			break;
-		val[i] = atoi(str);
-		str = strchr(str, ':');
-		if (str)
-			*str++ = 0;
-	}
+    for (i = 0; i < max; i++) {
+        if (!str)
+            break;
+        val[i] = atoi(str);
+        str    = strchr(str, ':');
+        if (str)
+            *str++ = 0;
+    }
 
-	if (i == 0) // No data found.
-		return 0;
+    if (i == 0) // No data found.
+        return 0;
 
-	if (i == 1) // Single value, have the whole range have the same value.
-		return 1;
+    if (i == 1) // Single value, have the whole range have the same value.
+        return 1;
 
-	return i;
+    return i;
 }
 
 /**
@@ -308,30 +308,30 @@ int skill_split_atoi(char *str, int *val, int max = MAX_SKILL_LEVEL) {
  * @return count: Number of success
  */
 uint8 skill_split_atoi2(char *str, int64 *val, const char *delim, int min_value, uint16 max) {
-	uint8 i = 0;
-	char *p = strtok(str, delim);
+    uint8 i = 0;
+    char *p = strtok(str, delim);
 
-	while (p != nullptr) {
-		int64 n = min_value;
+    while (p != nullptr) {
+        int64 n = min_value;
 
-		trim(p);
+        trim(p);
 
-		if (ISDIGIT(p[0])) // If using numeric
-			n = atoi(p);
-		else {
-			n = constant_lookup_int(p);
-			p = strtok(nullptr, delim);
-		}
+        if (ISDIGIT(p[0])) // If using numeric
+            n = atoi(p);
+        else {
+            n = constant_lookup_int(p);
+            p = strtok(nullptr, delim);
+        }
 
-		if (n > min_value) {
-			val[i] = n;
-			i++;
-			if (i >= max)
-				break;
-		}
-		p = strtok(nullptr, delim);
-	}
-	return i;
+        if (n > min_value) {
+            val[i] = n;
+            i++;
+            if (i >= max)
+                break;
+        }
+        p = strtok(nullptr, delim);
+    }
+    return i;
 }
 
 /**
@@ -340,31 +340,31 @@ uint8 skill_split_atoi2(char *str, int64 *val, const char *delim, int min_value,
  * @param val1: Temporary storage to first value
  * @param val2: Temporary storage to second value
  */
-static void itemdb_re_split_atoi(char* str, int* val1, int* val2) {
-	int i, val[2];
+static void itemdb_re_split_atoi(char *str, int *val1, int *val2) {
+    int i, val[2];
 
-	for (i = 0; i < 2; i++) {
-		if (!str)
-			break;
-		val[i] = atoi(str);
-		str = strchr(str, ':');
-		if (str)
-			*str++ = 0;
-	}
-	if (i == 0) {
-		*val1 = *val2 = 0;
-		return; // no data found
-	}
-	if (i == 1) { // Single Value
-		*val1 = val[0];
-		*val2 = 0;
-		return;
-	}
+    for (i = 0; i < 2; i++) {
+        if (!str)
+            break;
+        val[i] = atoi(str);
+        str    = strchr(str, ':');
+        if (str)
+            *str++ = 0;
+    }
+    if (i == 0) {
+        *val1 = *val2 = 0;
+        return; // no data found
+    }
+    if (i == 1) { // Single Value
+        *val1 = val[0];
+        *val2 = 0;
+        return;
+    }
 
-	// We assume we have 2 values.
-	*val1 = val[0];
-	*val2 = val[1];
-	return;
+    // We assume we have 2 values.
+    *val1 = val[0];
+    *val2 = val[1];
+    return;
 }
 
 /**
@@ -373,14 +373,14 @@ static void itemdb_re_split_atoi(char* str, int* val1, int* val2) {
  * @return True if level specific or false for same for all levels
  */
 static bool isMultiLevel(int arr[]) {
-	uint8 count = 0;
+    uint8 count = 0;
 
-	for (uint8 i = 0; i < MAX_SKILL_LEVEL; i++) {
-		if (arr[i] != 0)
-			count++;
-	}
+    for (uint8 i = 0; i < MAX_SKILL_LEVEL; i++) {
+        if (arr[i] != 0)
+            count++;
+    }
 
-	return (count < 2 ? false : true);
+    return (count < 2 ? false : true);
 }
 
 /**
@@ -389,279 +389,289 @@ static bool isMultiLevel(int arr[]) {
  * @return Converted string
  */
 std::string name2Upper(std::string name) {
-	util::tolower( name );
-	name[0] = toupper(name[0]);
+    util::tolower(name);
+    name[0] = toupper(name[0]);
 
-	for (size_t i = 0; i < name.size(); i++) {
-		if (name[i - 1] == '_' || (name[i - 2] == '1' && name[i - 1] == 'h') || (name[i - 2] == '2' && name[i - 1] == 'h'))
-			name[i] = toupper(name[i]);
-	}
+    for (size_t i = 0; i < name.size(); i++) {
+        if (name[i - 1] == '_' || (name[i - 2] == '1' && name[i - 1] == 'h') ||
+            (name[i - 2] == '2' && name[i - 1] == 'h'))
+            name[i] = toupper(name[i]);
+    }
 
-	return name;
+    return name;
 }
 
 // Constant loading functions
 static bool parse_item_constants_txt(const char *path) {
-	uint32 lines = 0, count = 0;
-	char line[1024];
+    uint32 lines = 0, count = 0;
+    char line[1024];
 
-	FILE *fp;
+    FILE *fp;
 
-	fp = fopen(path, "r");
-	if (fp == nullptr) {
-		ShowWarning("itemdb_readdb: File not found \"%s\", skipping.\n", path);
-		return false;
-	}
+    fp = fopen(path, "r");
+    if (fp == nullptr) {
+        ShowWarning("itemdb_readdb: File not found \"%s\", skipping.\n", path);
+        return false;
+    }
 
-	// process rows one by one
-	while (fgets(line, sizeof(line), fp))
-	{
-		char *str[32], *p;
-		int i;
-		lines++;
-		if (line[0] == '/' && line[1] == '/')
-			continue;
-		memset(str, 0, sizeof(str));
+    // process rows one by one
+    while (fgets(line, sizeof(line), fp)) {
+        char *str[32], *p;
+        int i;
+        lines++;
+        if (line[0] == '/' && line[1] == '/')
+            continue;
+        memset(str, 0, sizeof(str));
 
-		p = strstr(line, "//");
+        p = strstr(line, "//");
 
-		if (p != nullptr) {
-			*p = '\0';
-		}
+        if (p != nullptr) {
+            *p = '\0';
+        }
 
-		p = line;
-		while (ISSPACE(*p))
-			++p;
-		if (*p == '\0')
-			continue;// empty line
-		for (i = 0; i < 19; ++i)
-		{
-			str[i] = p;
-			p = strchr(p, ',');
-			if (p == nullptr)
-				break;// comma not found
-			*p = '\0';
-			++p;
-		}
+        p = line;
+        while (ISSPACE(*p))
+            ++p;
+        if (*p == '\0')
+            continue; // empty line
+        for (i = 0; i < 19; ++i) {
+            str[i] = p;
+            p      = strchr(p, ',');
+            if (p == nullptr)
+                break; // comma not found
+            *p = '\0';
+            ++p;
+        }
 
-		t_itemid item_id = strtoul(str[0], nullptr, 10);
+        t_itemid item_id = strtoul(str[0], nullptr, 10);
 
-		if (p == nullptr)
-		{
-			ShowError("itemdb_readdb: Insufficient columns in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-			continue;
-		}
+        if (p == nullptr) {
+            ShowError(
+                "itemdb_readdb: Insufficient columns in line %d of \"%s\" (item with id %u), skipping.\n", lines, path,
+                item_id
+            );
+            continue;
+        }
 
-		// Script
-		if (*p != '{')
-		{
-			ShowError("itemdb_readdb: Invalid format (Script column) in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-			continue;
-		}
-		str[19] = p + 1;
-		p = strstr(p + 1, "},");
-		if (p == nullptr)
-		{
-			ShowError("itemdb_readdb: Invalid format (Script column) in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-			continue;
-		}
-		*p = '\0';
-		p += 2;
+        // Script
+        if (*p != '{') {
+            ShowError(
+                "itemdb_readdb: Invalid format (Script column) in line %d of \"%s\" (item with id %u), skipping.\n",
+                lines, path, item_id
+            );
+            continue;
+        }
+        str[19] = p + 1;
+        p       = strstr(p + 1, "},");
+        if (p == nullptr) {
+            ShowError(
+                "itemdb_readdb: Invalid format (Script column) in line %d of \"%s\" (item with id %u), skipping.\n",
+                lines, path, item_id
+            );
+            continue;
+        }
+        *p = '\0';
+        p += 2;
 
-		// OnEquip_Script
-		if (*p != '{')
-		{
-			ShowError("itemdb_readdb: Invalid format (OnEquip_Script column) in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-			continue;
-		}
-		str[20] = p + 1;
-		p = strstr(p + 1, "},");
-		if (p == nullptr)
-		{
-			ShowError("itemdb_readdb: Invalid format (OnEquip_Script column) in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-			continue;
-		}
-		*p = '\0';
-		p += 2;
+        // OnEquip_Script
+        if (*p != '{') {
+            ShowError(
+                "itemdb_readdb: Invalid format (OnEquip_Script column) in line %d of \"%s\" (item with id %u), "
+                "skipping.\n",
+                lines, path, item_id
+            );
+            continue;
+        }
+        str[20] = p + 1;
+        p       = strstr(p + 1, "},");
+        if (p == nullptr) {
+            ShowError(
+                "itemdb_readdb: Invalid format (OnEquip_Script column) in line %d of \"%s\" (item with id %u), "
+                "skipping.\n",
+                lines, path, item_id
+            );
+            continue;
+        }
+        *p = '\0';
+        p += 2;
 
-		// OnUnequip_Script (last column)
-		if (*p != '{')
-		{
-			ShowError("itemdb_readdb: Invalid format (OnUnequip_Script column) in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-			continue;
-		}
-		str[21] = p;
-		p = &str[21][strlen(str[21]) - 2];
+        // OnUnequip_Script (last column)
+        if (*p != '{') {
+            ShowError(
+                "itemdb_readdb: Invalid format (OnUnequip_Script column) in line %d of \"%s\" (item with id %u), "
+                "skipping.\n",
+                lines, path, item_id
+            );
+            continue;
+        }
+        str[21] = p;
+        p       = &str[21][strlen(str[21]) - 2];
 
-		if (*p != '}') {
-			/* lets count to ensure it's not something silly e.g. a extra space at line ending */
-			int lcurly = 0, rcurly = 0;
+        if (*p != '}') {
+            /* lets count to ensure it's not something silly e.g. a extra space at line ending */
+            int lcurly = 0, rcurly = 0;
 
-			for (size_t v = 0; v < strlen(str[21]); v++) {
-				if (str[21][v] == '{')
-					lcurly++;
-				else if (str[21][v] == '}') {
-					rcurly++;
-					p = &str[21][v];
-				}
-			}
+            for (size_t v = 0; v < strlen(str[21]); v++) {
+                if (str[21][v] == '{')
+                    lcurly++;
+                else if (str[21][v] == '}') {
+                    rcurly++;
+                    p = &str[21][v];
+                }
+            }
 
-			if (lcurly != rcurly) {
-				ShowError("itemdb_readdb: Mismatching curly braces in line %d of \"%s\" (item with id %u), skipping.\n", lines, path, item_id);
-				continue;
-			}
-		}
-		str[21] = str[21] + 1;  //skip the first left curly
-		*p = '\0';              //null the last right curly
+            if (lcurly != rcurly) {
+                ShowError(
+                    "itemdb_readdb: Mismatching curly braces in line %d of \"%s\" (item with id %u), skipping.\n",
+                    lines, path, item_id
+                );
+                continue;
+            }
+        }
+        str[21] = str[21] + 1; // skip the first left curly
+        *p      = '\0';        // null the last right curly
 
-		uint32 view_id = strtoul(str[18], nullptr, 10);
-		char *name = trim(str[1]);
+        uint32 view_id = strtoul(str[18], nullptr, 10);
+        char *name     = trim(str[1]);
 
-		aegis_itemnames[item_id] = std::string(name);
+        aegis_itemnames[item_id] = std::string(name);
 
-		if (atoi(str[14]) & (EQP_HELM | EQP_COSTUME_HELM) && util::umap_find(aegis_itemviewid, view_id) == nullptr)
-			aegis_itemviewid[view_id] = item_id;
+        if (atoi(str[14]) & (EQP_HELM | EQP_COSTUME_HELM) && util::umap_find(aegis_itemviewid, view_id) == nullptr)
+            aegis_itemviewid[view_id] = item_id;
 
-		count++;
-	}
+        count++;
+    }
 
-	fclose(fp);
+    fclose(fp);
 
-	ShowStatus("Done reading '" CL_WHITE "%u" CL_RESET "' entries in '" CL_WHITE "%s" CL_RESET "'.\n", count, path);
+    ShowStatus("Done reading '" CL_WHITE "%u" CL_RESET "' entries in '" CL_WHITE "%s" CL_RESET "'.\n", count, path);
 
-	return true;
+    return true;
 }
 
 const std::string ItemDatabase::getDefaultLocation() {
-	return std::string(db_path) + "/item_db.yml";
+    return std::string(db_path) + "/item_db.yml";
 }
 
-uint64 ItemDatabase::parseBodyNode(const ryml::NodeRef& node) {
-	t_itemid nameid;
+uint64 ItemDatabase::parseBodyNode(const ryml::NodeRef &node) {
+    t_itemid nameid;
 
-	if (!this->asUInt32(node, "Id", nameid))
-		return 0;
+    if (!this->asUInt32(node, "Id", nameid))
+        return 0;
 
-	if (this->nodeExists(node, "AegisName")) {
-		std::string name;
+    if (this->nodeExists(node, "AegisName")) {
+        std::string name;
 
-		if (!this->asString(node, "AegisName", name))
-			return 0;
+        if (!this->asString(node, "AegisName", name))
+            return 0;
 
-		aegis_itemnames[nameid] = name;
-	}
+        aegis_itemnames[nameid] = name;
+    }
 
-	if (this->nodeExists(node, "View")) {
-		uint32 look;
+    if (this->nodeExists(node, "View")) {
+        uint32 look;
 
-		if (!this->asUInt32(node, "View", look))
-			return 0;
+        if (!this->asUInt32(node, "View", look))
+            return 0;
 
-		if (look > 0) {
-			if (this->nodeExists(node, "Locations")) {
-				const ryml::NodeRef& locationNode = node["Locations"];
+        if (look > 0) {
+            if (this->nodeExists(node, "Locations")) {
+                const ryml::NodeRef &locationNode = node["Locations"];
 
-				static std::vector<std::string> locations = {
-					"Head_Low",
-					"Head_Mid",
-					"Head_Top",
-					"Costume_Head_Low",
-					"Costume_Head_Mid",
-					"Costume_Head_Top"
-				};
+                static std::vector<std::string> locations = {"Head_Low",         "Head_Mid",
+                                                             "Head_Top",         "Costume_Head_Low",
+                                                             "Costume_Head_Mid", "Costume_Head_Top"};
 
-				for (std::string& location : locations) {
-					if (this->nodeExists(locationNode, location)) {
-						bool active;
+                for (std::string &location : locations) {
+                    if (this->nodeExists(locationNode, location)) {
+                        bool active;
 
-						if (!this->asBool(locationNode, location, active))
-							return 0;
+                        if (!this->asBool(locationNode, location, active))
+                            return 0;
 
-						aegis_itemviewid[look] = nameid;
-						break;
-					}
-				}
-			}
-		}
-	}
+                        aegis_itemviewid[look] = nameid;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-	return 1;
+    return 1;
 }
 
-void ItemDatabase::loadingFinished() {
-}
+void ItemDatabase::loadingFinished() {}
 
 ItemDatabase item_db;
 
-static bool parse_mob_constants_txt( char *split[], size_t columns, size_t current ){
-	uint16 mob_id = atoi(split[0]);
-	char *name = trim(split[1]);
+static bool parse_mob_constants_txt(char *split[], size_t columns, size_t current) {
+    uint16 mob_id = atoi(split[0]);
+    char *name    = trim(split[1]);
 
-	aegis_mobnames[mob_id] = std::string(name);
+    aegis_mobnames[mob_id] = std::string(name);
 
-	return true;
+    return true;
 }
 
-static bool parse_skill_constants_txt( char *split[], size_t columns, size_t current ){
-	uint16 skill_id = atoi(split[0]);
-	char *name = trim(split[16]);
+static bool parse_skill_constants_txt(char *split[], size_t columns, size_t current) {
+    uint16 skill_id = atoi(split[0]);
+    char *name      = trim(split[16]);
 
-	aegis_skillnames[skill_id] = std::string(name);
+    aegis_skillnames[skill_id] = std::string(name);
 
-	return true;
+    return true;
 }
 
 const std::string SkillDatabase::getDefaultLocation() {
-	return std::string(db_path) + "/skill_db.yml";
+    return std::string(db_path) + "/skill_db.yml";
 }
 
-uint64 SkillDatabase::parseBodyNode(const ryml::NodeRef& node) {
-	t_itemid nameid;
+uint64 SkillDatabase::parseBodyNode(const ryml::NodeRef &node) {
+    t_itemid nameid;
 
-	if (!this->asUInt32(node, "Id", nameid))
-		return 0;
+    if (!this->asUInt32(node, "Id", nameid))
+        return 0;
 
-	if (this->nodeExists(node, "Name")) {
-		std::string name;
+    if (this->nodeExists(node, "Name")) {
+        std::string name;
 
-		if (!this->asString(node, "Name", name))
-			return 0;
+        if (!this->asString(node, "Name", name))
+            return 0;
 
-		aegis_skillnames[nameid] = name;
-	}
+        aegis_skillnames[nameid] = name;
+    }
 
-	return 1;
+    return 1;
 }
 
 void SkillDatabase::clear() {
-	TypesafeCachedYamlDatabase::clear();
+    TypesafeCachedYamlDatabase::clear();
 }
 
-void SkillDatabase::loadingFinished(){
-}
+void SkillDatabase::loadingFinished() {}
 
 SkillDatabase skill_db;
 
-const std::string MobDatabase::getDefaultLocation(){
-	return std::string( db_path ) + "/mob_db.yml";
+const std::string MobDatabase::getDefaultLocation() {
+    return std::string(db_path) + "/mob_db.yml";
 }
 
-uint64 MobDatabase::parseBodyNode(const ryml::NodeRef& node) {
-	uint16 mob_id;
+uint64 MobDatabase::parseBodyNode(const ryml::NodeRef &node) {
+    uint16 mob_id;
 
-	if (!this->asUInt16(node, "Id", mob_id))
-		return 0;
+    if (!this->asUInt16(node, "Id", mob_id))
+        return 0;
 
-	if (this->nodeExists(node, "AegisName")) {
-		std::string name;
+    if (this->nodeExists(node, "AegisName")) {
+        std::string name;
 
-		if (!this->asString(node, "AegisName", name))
-			return 0;
+        if (!this->asString(node, "AegisName", name))
+            return 0;
 
-		aegis_mobnames[mob_id] = name;
-	}
+        aegis_mobnames[mob_id] = name;
+    }
 
-	return 1;
+    return 1;
 }
 
 void MobDatabase::loadingFinished() {};

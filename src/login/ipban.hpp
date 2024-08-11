@@ -26,7 +26,7 @@ void ipban_log(uint32 ip);
  * @param value: config value for keyword
  * @return true if successful, false if config not complete or server already running
  */
-bool ipban_config_read(const char* key, const char* value);
+bool ipban_config_read(const char *key, const char *value);
 
 /**
  * Initialize the module.

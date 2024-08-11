@@ -9,103 +9,101 @@
 #include <common/timer.hpp>
 
 #include "status.hpp" // struct status_data, struct status_change
-#include "unit.hpp" // struct unit_data
+#include "unit.hpp"   // struct unit_data
 
 const t_tick MIN_ELETHINKTIME = 100;
 #define MIN_ELEDISTANCE 2
 #define MAX_ELEDISTANCE 5
 
-#define EL_MODE_AGGRESSIVE (MD_CANMOVE|MD_AGGRESSIVE|MD_CANATTACK)
-#define EL_MODE_ASSIST (MD_CANMOVE|MD_ASSIST)
+#define EL_MODE_AGGRESSIVE (MD_CANMOVE | MD_AGGRESSIVE | MD_CANATTACK)
+#define EL_MODE_ASSIST (MD_CANMOVE | MD_ASSIST)
 #define EL_MODE_PASSIVE MD_CANMOVE
 
-///Enum of Elemental Skill Mode
+/// Enum of Elemental Skill Mode
 enum e_elemental_skillmode : uint8 {
-	EL_SKILLMODE_PASSIVE    = 0x1,
-	EL_SKILLMODE_ASSIST     = 0x2,
-	EL_SKILLMODE_AGGRESSIVE = 0x4,
+    EL_SKILLMODE_PASSIVE    = 0x1,
+    EL_SKILLMODE_ASSIST     = 0x2,
+    EL_SKILLMODE_AGGRESSIVE = 0x4,
 };
 
 #if __cplusplus < 201402L
 namespace std {
-	template <> struct hash<e_elemental_skillmode> {
-		size_t operator() (const e_elemental_skillmode& t) const { return size_t(t); }
-	};
-}
+    template <> struct hash<e_elemental_skillmode> {
+        size_t operator()(const e_elemental_skillmode &t) const { return size_t(t); }
+    };
+} // namespace std
 #endif
 
-///Enum of Elemental ID
-enum elemental_elementalid  : uint16 {
-	// Sorcerer's Elementals
-	ELEMENTALID_AGNI_S = 2114,
-	ELEMENTALID_AGNI_M,
-	ELEMENTALID_AGNI_L,
-	ELEMENTALID_AQUA_S,
-	ELEMENTALID_AQUA_M,
-	ELEMENTALID_AQUA_L,
-	ELEMENTALID_VENTUS_S,
-	ELEMENTALID_VENTUS_M,
-	ELEMENTALID_VENTUS_L,
-	ELEMENTALID_TERA_S,
-	ELEMENTALID_TERA_M,
-	ELEMENTALID_TERA_L,
+/// Enum of Elemental ID
+enum elemental_elementalid : uint16 {
+    // Sorcerer's Elementals
+    ELEMENTALID_AGNI_S = 2114,
+    ELEMENTALID_AGNI_M,
+    ELEMENTALID_AGNI_L,
+    ELEMENTALID_AQUA_S,
+    ELEMENTALID_AQUA_M,
+    ELEMENTALID_AQUA_L,
+    ELEMENTALID_VENTUS_S,
+    ELEMENTALID_VENTUS_M,
+    ELEMENTALID_VENTUS_L,
+    ELEMENTALID_TERA_S,
+    ELEMENTALID_TERA_M,
+    ELEMENTALID_TERA_L,
 
-	// Elemental Master's Elementals
-	ELEMENTALID_DILUVIO = 20816,
-	ELEMENTALID_ARDOR,
-	ELEMENTALID_PROCELLA,
-	ELEMENTALID_TERREMOTUS,
-	ELEMENTALID_SERPENS,
+    // Elemental Master's Elementals
+    ELEMENTALID_DILUVIO = 20816,
+    ELEMENTALID_ARDOR,
+    ELEMENTALID_PROCELLA,
+    ELEMENTALID_TERREMOTUS,
+    ELEMENTALID_SERPENS,
 };
 
 struct s_elemental_skill {
-	uint16 id, lv;
+    uint16 id, lv;
 };
 
 struct s_elemental_db {
-	int32 class_;
-	std::string sprite, name;
-	uint16 lv;
-	uint16 range2, range3;
-	status_data status;
-	view_data vd;
-	std::unordered_map<e_elemental_skillmode, std::shared_ptr<s_elemental_skill>> skill;	/// mode, skill
+    int32 class_;
+    std::string sprite, name;
+    uint16 lv;
+    uint16 range2, range3;
+    status_data status;
+    view_data vd;
+    std::unordered_map<e_elemental_skillmode, std::shared_ptr<s_elemental_skill>> skill; /// mode, skill
 };
 
 struct s_elemental_data {
-	block_list bl;
-	unit_data ud;
-	view_data *vd;
-	status_data base_status, battle_status;
-	status_change sc;
-	regen_data regen;
+    block_list bl;
+    unit_data ud;
+    view_data *vd;
+    status_data base_status, battle_status;
+    status_change sc;
+    regen_data regen;
 
-	std::shared_ptr<s_elemental_db> db;
-	s_elemental elemental;
+    std::shared_ptr<s_elemental_db> db;
+    s_elemental elemental;
 
-	int masterteleport_timer;
-	map_session_data *master;
-	int summon_timer;
-	int skill_timer;
+    int masterteleport_timer;
+    map_session_data *master;
+    int summon_timer;
+    int skill_timer;
 
-	t_tick last_thinktime, last_linktime, last_spdrain_time;
-	short min_chase;
-	int target_id, attacked_id;
+    t_tick last_thinktime, last_linktime, last_spdrain_time;
+    short min_chase;
+    int target_id, attacked_id;
 };
 
 class ElementalDatabase : public TypesafeYamlDatabase<int32, s_elemental_db> {
-public:
-	ElementalDatabase() : TypesafeYamlDatabase("ELEMENTAL_DB", 1) {
+  public:
+    ElementalDatabase() : TypesafeYamlDatabase("ELEMENTAL_DB", 1) {}
 
-	}
-
-	const std::string getDefaultLocation() override;
-	uint64 parseBodyNode(const ryml::NodeRef& node) override;
+    const std::string getDefaultLocation() override;
+    uint64 parseBodyNode(const ryml::NodeRef &node) override;
 };
 
 extern ElementalDatabase elemental_db;
 
-struct view_data * elemental_get_viewdata(int class_);
+struct view_data *elemental_get_viewdata(int class_);
 
 int elemental_create(map_session_data *sd, int class_, unsigned int lifetime);
 int elemental_data_received(s_elemental *ele, bool flag);
@@ -123,8 +121,8 @@ void elemental_summon_stop(s_elemental_data *ed);
 t_tick elemental_get_lifetime(s_elemental_data *ed);
 
 int elemental_unlocktarget(s_elemental_data *ed);
-bool elemental_skillnotok( uint16 skill_id, s_elemental_data& ed );
-int elemental_set_target( map_session_data *sd, block_list *bl );
+bool elemental_skillnotok(uint16 skill_id, s_elemental_data &ed);
+int elemental_set_target(map_session_data *sd, block_list *bl);
 int elemental_clean_effect(s_elemental_data *ed);
 int elemental_action(s_elemental_data *ed, block_list *bl, t_tick tick);
 struct s_skill_condition elemental_skill_get_requirements(uint16 skill_id, uint16 skill_lv);

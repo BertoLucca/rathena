@@ -18,11 +18,11 @@
 #endif
 
 #ifndef PACKETVER_RE
-	/// From November 2015 only RagexeRE are supported.
-	/// After July 2018 only Ragexe are supported.
-	#if ( PACKETVER > 20151104 && PACKETVER < 20180704 ) || ( PACKETVER >= 20200902 && PACKETVER <= 20211118 )
-		#define PACKETVER_RE
-	#endif
+/// From November 2015 only RagexeRE are supported.
+/// After July 2018 only Ragexe are supported.
+#if (PACKETVER > 20151104 && PACKETVER < 20180704) || (PACKETVER >= 20200902 && PACKETVER <= 20211118)
+#define PACKETVER_RE
+#endif
 #endif
 
 #ifndef PACKETVER_RE
@@ -70,11 +70,11 @@ supported client is 2011-08-17. #endif #endif
 #endif
 
 #ifndef DUMP_UNKNOWN_PACKET
-//#define DUMP_UNKNOWN_PACKET
+// #define DUMP_UNKNOWN_PACKET
 #endif
 
 #ifndef DUMP_INVALID_PACKET
-//#define DUMP_INVALID_PACKET
+// #define DUMP_INVALID_PACKET
 #endif
 
 /**
@@ -86,8 +86,7 @@ supported client is 2011-08-17. #endif #endif
 
 /// Check if the client needs delete_date as remaining time and not the actual delete_date (actually
 /// it was tested for clients since 2013)
-#define PACKETVER_CHAR_DELETEDATE                                                                  \
-    (PACKETVER > 20130000 && PACKETVER <= 20141022) || PACKETVER >= 20150513
+#define PACKETVER_CHAR_DELETEDATE (PACKETVER > 20130000 && PACKETVER <= 20141022) || PACKETVER >= 20150513
 
 /// Check if the specified packetvresion supports the cashshop sale system
 #define PACKETVER_SUPPORTS_SALES PACKETVER >= 20131223
