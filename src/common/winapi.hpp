@@ -46,13 +46,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_NONSTDC_NO_WARNINGS
 
-#include <In6addr.h>
-#include <MMSystem.h>
-#include <Mswsock.h>
-#include <WinSock2.h>
-#include <Windows.h>
-#include <Ws2tcpip.h>
+// clang-format off
 #include <io.h>
+#include <Windows.h>
+#include <WinSock2.h>
+#include <In6addr.h>
+#include <Ws2tcpip.h>
+#include <Mswsock.h>
+#include <MMSystem.h>
+// clang-format on
 
 #undef NOMINMAX
 
