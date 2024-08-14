@@ -13,4 +13,5 @@ docker run --rm `
     --entrypoint /rag/build.bat `
     --mount "type=bind,source=$rAthena,target=C:/rag-ro,readonly" `
     --mount "type=bind,source=$rAthena/build,target=C:/rag/build" `
-    rag-msvc-compiler:latest;
+    rag-msvc-compiler:latest |
+Tee-Object -file "$rAthena/.vs/build.log";
