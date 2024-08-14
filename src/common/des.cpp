@@ -8,145 +8,105 @@
 /// @see http://en.wikipedia.org/wiki/Data_Encryption_Standard
 /// @see http://en.wikipedia.org/wiki/DES_supplementary_material
 
-
 /// Bitmask for accessing individual bits of a byte.
-static const uint8_t mask[8] = {
-	0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01
-};
-
+static const uint8_t mask[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 
 /// Initial permutation (IP).
-static void IP(BIT64* src)
-{
-	BIT64 tmp = {{0}};
+static void IP(BIT64 *src) {
+    BIT64 tmp = {{0}};
 
-	static const uint8_t ip_table[64] = {
-		58, 50, 42, 34, 26, 18, 10,  2,
-		60, 52, 44, 36, 28, 20, 12,  4,
-		62, 54, 46, 38, 30, 22, 14,  6,
-		64, 56, 48, 40, 32, 24, 16,  8,
-		57, 49, 41, 33, 25, 17,  9,  1,
-		59, 51, 43, 35, 27, 19, 11,  3,
-		61, 53, 45, 37, 29, 21, 13,  5,
-		63, 55, 47, 39, 31, 23, 15,  7,
-	};
+    static const uint8_t ip_table[64] = {
+        58, 50, 42, 34, 26, 18, 10, 2,  60, 52, 44, 36, 28, 20, 12, 4,  62, 54, 46, 38, 30, 22,
+        14, 6,  64, 56, 48, 40, 32, 24, 16, 8,  57, 49, 41, 33, 25, 17, 9,  1,  59, 51, 43, 35,
+        27, 19, 11, 3,  61, 53, 45, 37, 29, 21, 13, 5,  63, 55, 47, 39, 31, 23, 15, 7,
+    };
 
-	size_t i;
-	for( i = 0; i < ARRAYLENGTH(ip_table); ++i )
-	{
-		uint8_t j = ip_table[i] - 1;
-		if( src->b[(j >> 3) & 7] &  mask[j & 7] )
-			tmp .b[(i >> 3) & 7] |= mask[i & 7];
-	}
+    size_t i;
+    for (i = 0; i < ARRAYLENGTH(ip_table); ++i) {
+        uint8_t j = ip_table[i] - 1;
+        if (src->b[(j >> 3) & 7] & mask[j & 7])
+            tmp.b[(i >> 3) & 7] |= mask[i & 7];
+    }
 
-	*src = tmp;
+    *src = tmp;
 }
-
 
 /// Final permutation (IP^-1).
-static void FP(BIT64* src)
-{
-	BIT64 tmp = {{0}};
+static void FP(BIT64 *src) {
+    BIT64 tmp = {{0}};
 
-	static const uint8_t fp_table[64] = {
-		40,  8, 48, 16, 56, 24, 64, 32,
-		39,  7, 47, 15, 55, 23, 63, 31,
-		38,  6, 46, 14, 54, 22, 62, 30,
-		37,  5, 45, 13, 53, 21, 61, 29,
-		36,  4, 44, 12, 52, 20, 60, 28,
-		35,  3, 43, 11, 51, 19, 59, 27,
-		34,  2, 42, 10, 50, 18, 58, 26,
-		33,  1, 41,  9, 49, 17, 57, 25,
-	};
+    static const uint8_t fp_table[64] = {
+        40, 8,  48, 16, 56, 24, 64, 32, 39, 7,  47, 15, 55, 23, 63, 31, 38, 6,  46, 14, 54, 22,
+        62, 30, 37, 5,  45, 13, 53, 21, 61, 29, 36, 4,  44, 12, 52, 20, 60, 28, 35, 3,  43, 11,
+        51, 19, 59, 27, 34, 2,  42, 10, 50, 18, 58, 26, 33, 1,  41, 9,  49, 17, 57, 25,
+    };
 
-	size_t i;
-	for( i = 0; i < ARRAYLENGTH(fp_table); ++i )
-	{
-		uint8_t j = fp_table[i] - 1;
-		if( src->b[(j >> 3) & 7] &  mask[j & 7] )
-			tmp .b[(i >> 3) & 7] |= mask[i & 7];
-	}
+    size_t i;
+    for (i = 0; i < ARRAYLENGTH(fp_table); ++i) {
+        uint8_t j = fp_table[i] - 1;
+        if (src->b[(j >> 3) & 7] & mask[j & 7])
+            tmp.b[(i >> 3) & 7] |= mask[i & 7];
+    }
 
-	*src = tmp;
+    *src = tmp;
 }
-
 
 /// Expansion (E).
 /// Expands upper four 8-bits (32b) into eight 6-bits (48b).
-static void E(BIT64* src)
-{
-	BIT64 tmp = {{0}};
+static void E(BIT64 *src) {
+    BIT64 tmp = {{0}};
 
-if( false )
-{// original
-	static const uint8_t expand_table[48] = {
-		32,  1,  2,  3,  4,  5,
-		 4,  5,  6,  7,  8,  9,
-		 8,  9, 10, 11, 12, 13,
-		12, 13, 14, 15, 16, 17,
-		16, 17, 18, 19, 20, 21,
-		20, 21, 22, 23, 24, 25,
-		24, 25, 26, 27, 28, 29,
-		28, 29, 30, 31, 32,  1,
-	};
+    if (false) { // original
+        static const uint8_t expand_table[48] = {
+            32, 1,  2,  3,  4,  5,  4,  5,  6,  7,  8,  9,  8,  9,  10, 11, 12, 13, 12, 13, 14, 15, 16, 17,
+            16, 17, 18, 19, 20, 21, 20, 21, 22, 23, 24, 25, 24, 25, 26, 27, 28, 29, 28, 29, 30, 31, 32, 1,
+        };
 
-	size_t i;
-	for( i = 0; i < ARRAYLENGTH(expand_table); ++i )
-	{
-		uint8_t j = expand_table[i] - 1;
-		if( src->b[j / 8 + 4] &  mask[j % 8] )
-			tmp .b[i / 6 + 0] |= mask[i % 6];
-	}
+        size_t i;
+        for (i = 0; i < ARRAYLENGTH(expand_table); ++i) {
+            uint8_t j = expand_table[i] - 1;
+            if (src->b[j / 8 + 4] & mask[j % 8])
+                tmp.b[i / 6 + 0] |= mask[i % 6];
+        }
+    } else {                                                     // optimized
+        tmp.b[0] = ((src->b[7] << 5) | (src->b[4] >> 3)) & 0x3f; // ..0 vutsr
+        tmp.b[1] = ((src->b[4] << 1) | (src->b[5] >> 7)) & 0x3f; // ..srqpo n
+        tmp.b[2] = ((src->b[4] << 5) | (src->b[5] >> 3)) & 0x3f; // ..o nmlkj
+        tmp.b[3] = ((src->b[5] << 1) | (src->b[6] >> 7)) & 0x3f; // ..kjihg f
+        tmp.b[4] = ((src->b[5] << 5) | (src->b[6] >> 3)) & 0x3f; // ..g fedcb
+        tmp.b[5] = ((src->b[6] << 1) | (src->b[7] >> 7)) & 0x3f; // ..cba98 7
+        tmp.b[6] = ((src->b[6] << 5) | (src->b[7] >> 3)) & 0x3f; // ..8 76543
+        tmp.b[7] = ((src->b[7] << 1) | (src->b[4] >> 7)) & 0x3f; // ..43210 v
+    }
+
+    *src = tmp;
 }
-else
-{// optimized
-	tmp.b[0] = ((src->b[7]<<5) | (src->b[4]>>3)) & 0x3f;	// ..0 vutsr
-	tmp.b[1] = ((src->b[4]<<1) | (src->b[5]>>7)) & 0x3f;	// ..srqpo n
-	tmp.b[2] = ((src->b[4]<<5) | (src->b[5]>>3)) & 0x3f;	// ..o nmlkj
-	tmp.b[3] = ((src->b[5]<<1) | (src->b[6]>>7)) & 0x3f;	// ..kjihg f
-	tmp.b[4] = ((src->b[5]<<5) | (src->b[6]>>3)) & 0x3f;	// ..g fedcb
-	tmp.b[5] = ((src->b[6]<<1) | (src->b[7]>>7)) & 0x3f;	// ..cba98 7
-	tmp.b[6] = ((src->b[6]<<5) | (src->b[7]>>3)) & 0x3f;	// ..8 76543
-	tmp.b[7] = ((src->b[7]<<1) | (src->b[4]>>7)) & 0x3f;	// ..43210 v
-}
-
-	*src = tmp;
-}
-
 
 /// Transposition (P-BOX).
-static void TP(BIT64* src)
-{
-	BIT64 tmp = {{0}};
+static void TP(BIT64 *src) {
+    BIT64 tmp = {{0}};
 
-	static const uint8_t tp_table[32] = {
-		16,  7, 20, 21,
-		29, 12, 28, 17,
-		 1, 15, 23, 26,
-		 5, 18, 31, 10,
-		 2,  8, 24, 14,
-		32, 27,  3,  9,
-		19, 13, 30,  6,
-		22, 11,  4, 25,
-	};
+    static const uint8_t tp_table[32] = {
+        16, 7, 20, 21, 29, 12, 28, 17, 1,  15, 23, 26, 5,  18, 31, 10,
+        2,  8, 24, 14, 32, 27, 3,  9,  19, 13, 30, 6,  22, 11, 4,  25,
+    };
 
-	size_t i;
-	for( i = 0; i < ARRAYLENGTH(tp_table); ++i )
-	{
-		uint8_t j = tp_table[i] - 1;
-		if( src->b[(j >> 3) + 0] &  mask[j & 7] )
-			tmp .b[(i >> 3) + 4] |= mask[i & 7];
-	}
+    size_t i;
+    for (i = 0; i < ARRAYLENGTH(tp_table); ++i) {
+        uint8_t j = tp_table[i] - 1;
+        if (src->b[(j >> 3) + 0] & mask[j & 7])
+            tmp.b[(i >> 3) + 4] |= mask[i & 7];
+    }
 
-	*src = tmp;
+    *src = tmp;
 }
-
 
 /// Substitution boxes (S-boxes).
 /// NOTE: This implementation was optimized to process two nibbles in one step (twice as fast).
-static void SBOX(BIT64* src)
-{
-	BIT64 tmp = {{0}};
+static void SBOX(BIT64 *src) {
+    BIT64 tmp = {{0}};
+
+    // clang-format off
 
 	static const uint8_t s_table[4][64] = {
 		  {
@@ -172,46 +132,40 @@ static void SBOX(BIT64* src)
 		}
 	};
 
-	size_t i;
-	for( i = 0; i < ARRAYLENGTH(s_table); ++i )
-	{
-		tmp.b[i] = (s_table[i][src->b[i*2+0]] & 0xf0)
-		         | (s_table[i][src->b[i*2+1]] & 0x0f);
-	}
+    // clang-format on
 
-	*src = tmp;
+    size_t i;
+    for (i = 0; i < ARRAYLENGTH(s_table); ++i) {
+        tmp.b[i] = (s_table[i][src->b[i * 2 + 0]] & 0xf0) | (s_table[i][src->b[i * 2 + 1]] & 0x0f);
+    }
+
+    *src = tmp;
 }
-
 
 /// DES round function.
 /// XORs src[0..3] with TP(SBOX(E(src[4..7]))).
-static void RoundFunction(BIT64* src)
-{
-	BIT64 tmp = *src;
-	E(&tmp);
-	SBOX(&tmp);
-	TP(&tmp);
+static void RoundFunction(BIT64 *src) {
+    BIT64 tmp = *src;
+    E(&tmp);
+    SBOX(&tmp);
+    TP(&tmp);
 
-	src->b[0] ^= tmp.b[4];
-	src->b[1] ^= tmp.b[5];
-	src->b[2] ^= tmp.b[6];
-	src->b[3] ^= tmp.b[7];
+    src->b[0] ^= tmp.b[4];
+    src->b[1] ^= tmp.b[5];
+    src->b[2] ^= tmp.b[6];
+    src->b[3] ^= tmp.b[7];
 }
 
-
-void des_decrypt_block(BIT64* block)
-{
-	IP(block);
-	RoundFunction(block);
-	FP(block);
+void des_decrypt_block(BIT64 *block) {
+    IP(block);
+    RoundFunction(block);
+    FP(block);
 }
 
+void des_decrypt(unsigned char *data, size_t size) {
+    BIT64 *p = (BIT64 *)data;
+    size_t i;
 
-void des_decrypt(unsigned char* data, size_t size)
-{
-	BIT64* p = (BIT64*)data;
-	size_t i;
-
-	for( i = 0; i*8 < size; i += 8 )
-		des_decrypt_block(p);
+    for (i = 0; i * 8 < size; i += 8)
+        des_decrypt_block(p);
 }

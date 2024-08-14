@@ -6,43 +6,22 @@
 
 #include <common/cbasetypes.hpp>
 
-enum e_month{
-	JANUARY = 1,
-	FEBRUARY,
-	MARCH,
-	APRIL,
-	MAY,
-	JUNE,
-	JULY,
-	AUGUST,
-	SEPTEMBER,
-	OCTOBER,
-	NOVEMBER,
-	DECEMBER
-};
+enum e_month { JANUARY = 1, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER };
 
-enum e_dayofweek{
-	SUNDAY = 0,
-	MONDAY,
-	TUESDAY,
-	WEDNESDAY,
-	THURSDAY,
-	FRIDAY,
-	SATURDAY
-};
+enum e_dayofweek { SUNDAY = 0, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY };
 
-enum e_date_type{
-	DT_MIN = 0,
-	DT_SECOND,
-	DT_MINUTE,
-	DT_HOUR,
-	DT_DAYOFWEEK,
-	DT_DAYOFMONTH,
-	DT_MONTH,
-	DT_YEAR,
-	DT_DAYOFYEAR,
-	DT_YYYYMMDD,
-	DT_MAX
+enum e_date_type {
+    DT_MIN = 0,
+    DT_SECOND,
+    DT_MINUTE,
+    DT_HOUR,
+    DT_DAYOFWEEK,
+    DT_DAYOFMONTH,
+    DT_MONTH,
+    DT_YEAR,
+    DT_DAYOFYEAR,
+    DT_YYYYMMDD,
+    DT_MAX
 };
 
 int date_get_year(void);
@@ -55,7 +34,7 @@ int date_get_hour(void);
 int date_get_min(void);
 int date_get_sec(void);
 
-int date_get( enum e_date_type type );
+int date_get(enum e_date_type type);
 
 bool is_day_of_sun(void);
 bool is_day_of_moon(void);

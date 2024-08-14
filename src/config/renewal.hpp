@@ -4,14 +4,13 @@
 #ifndef CONFIG_RENEWAL_HPP
 #define CONFIG_RENEWAL_HPP
 
-//quick option to disable all renewal option, used by ./configure
-//#define PRERE
+// quick option to disable all renewal option, used by ./configure
+// #define PRERE
 #ifndef PRERE
 /**
  * rAthena configuration file (http://rathena.org)
  * For detailed guidance on these check http://rathena.org/wiki/SRC/config/
  **/
-
 
 /**
  * @INFO: This file holds general-purpose renewal settings, for class-specific ones check /src/config/classes folder
